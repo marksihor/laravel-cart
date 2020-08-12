@@ -47,6 +47,15 @@ class Cart
         ])->delete();
     }
 
+    public function getTotal(string $type): float
+    {
+        if (in_array($type, ['total', 'discount', 'price'])) {
+            return CartItem::where('cart_id', $this->getCart()->id)->sum($type);
+        }
+
+        return 0;
+    }
+
     public function clearCart()
     {
         CartItem::where('cart_id', $this->getCart()->id)->delete();

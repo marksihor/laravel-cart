@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
-    const REQUIRED_FIELDS = ['attributes', 'product_id'];
+    const REQUIRED_FIELDS = ['attributes', 'product_id', 'seller_id'];
 
     protected $guarded = ['id'];
 

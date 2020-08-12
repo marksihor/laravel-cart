@@ -8,16 +8,9 @@ use MarksIhor\LaravelCart\Models\{Cart as CartModel, CartItem};
 
 class Cart
 {
-    protected CartModel $cart;
-
-    public function __construct()
-    {
-        $this->cart = $this->getCart();
-    }
-
     public function getContent(): Collection
     {
-        return $this->cart->items;
+        return $this->getCart()->items->groupBy('seller_id');
     }
 
     public function getContentArray(): array
@@ -31,20 +24,32 @@ class Cart
             if (!key_exists($field, $data)) throw new InvalidItemDataException;
         }
 
-        CartItem::create($this->formatItemData($this->cart, $data));
+        CartItem::create($this->formatItemData($this->getCart(), $data, 'create'));
+    }
+
+    public function updateItem(CartItem $item, array $data): void
+    {
+        $item->update($this->formatItemData($this->getCart(), $data));
+    }
+
+    public function updateItemById(int $itemId, array $data): void
+    {
+        $item = CartItem::where(['id' => $itemId, 'cart_id' => $this->getCart()->id])->first();
+
+        if ($item) $this->updateItem($item, $data);
     }
 
     public function deleteItem(int $itemId): void
     {
         CartItem::where([
-            'cart_id' => $this->cart->id,
+            'cart_id' => $this->getCart()->id,
             'id' => $itemId
         ])->delete();
     }
 
     public function clearCart()
     {
-        CartItem::where('cart_id', $this->cart->id)->delete();
+        CartItem::where('cart_id', $this->getCart()->id)->delete();
     }
 
     private function getCart(): CartModel
@@ -56,16 +61,22 @@ class Cart
         }
     }
 
-    private function formatItemData(CartModel $cart, array $data): array
+    private function formatItemData(CartModel $cart, array $data, string $type = null): array
     {
         // required fields
-        $result = [
-            'cart_id' => $cart->id,
-            'product_id' => $data['product_id']
-        ];
+
+        if ($type === 'create') {
+            $result = [
+                'cart_id' => $cart->id,
+                'product_id' => $data['product_id'],
+                'seller_id' => $data['seller_id'],
+            ];
+        } else {
+            $result = [];
+        }
 
         // optional fields
-        foreach (['price', 'discount', 'total', 'seller_id', 'data'] as $item) {
+        foreach (['price', 'discount', 'total', 'data', 'attributes'] as $item) {
             if (key_exists($item, $data)) $result[$item] = $data[$item];
         }
 

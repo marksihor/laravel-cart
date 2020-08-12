@@ -5,6 +5,6 @@ return [
     'product' => 'App\Models\Product',
     'seller' => 'App\Models\User',
 
-    // The place where to store user identifier wether logged in or not, available options: session, cache
+    // The place where to store user identifier wether logged in or not, available options: session
     'storage' => 'session'
 ];

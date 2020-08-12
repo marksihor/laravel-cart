@@ -10,7 +10,7 @@ class Cart extends Model
 
     public function items()
     {
-        return $this->hasMany('MarksIhor\LaravelMessaging\Models\CartItem')
+        return $this->hasMany('MarksIhor\LaravelCart\Models\CartItem')
             ->orderBy('id', 'desc');
     }
 }

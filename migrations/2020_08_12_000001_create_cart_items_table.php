@@ -16,11 +16,13 @@ class CreateCartItemsTable extends Migration
         Schema::create('cart_items', function (Blueprint $table) {
             $table->id()->index();
             $table->foreignId('cart_id')->constrained();
+            $table->json('attributes')->nullable();
             $table->json('data')->nullable();
             $table->float('price', 10, 2)->default(0)->index();
             $table->float('discount', 10, 2)->default(0)->index();
             $table->float('total', 10, 2)->default(0)->index();
-            $table->unsignedBigInteger('model_id')->index();
+            $table->unsignedBigInteger('product_id')->index();
+            $table->unsignedBigInteger('seller_id')->nullable()->index();
             $table->timestamps();
         });
     }

@@ -6,11 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartItem extends Model
 {
+    const REQUIRED_FIELDS = ['attributes', 'product_id'];
+
     protected $guarded = ['id'];
 
     protected $hidden = ['updated_at', 'chat_id'];
 
     protected $casts = [
+        'attributes' => 'array',
         'data' => 'array'
     ];
 
@@ -19,8 +22,13 @@ class CartItem extends Model
         return $this->belongsTo('MarksIhor\LaravelCart\Models\Cart');
     }
 
-    public function model()
+    public function product()
     {
-        return $this->belongsTo(config('cart.model'));
+        return $this->belongsTo(config('cart.product'));
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo(config('cart.seller'));
     }
 }

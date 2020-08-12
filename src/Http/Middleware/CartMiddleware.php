@@ -17,14 +17,10 @@ class CartMiddleware
             Helpers::setUuid((string)Str::uuid());
         }
 
-//        if (auth()->check()) {
-//            if ($cartUuid) {
-//                Cart::where('uuid', $cartUuid)
-//                    ->update(['user_id' => auth()->id()]);
-//            }
-//
-//            Helpers::setUuid(auth()->id());
-//        }
+        if (auth()->check() && $cartUuid) {
+            Cart::where('uuid', $cartUuid)
+                ->update(['user_id' => auth()->id()]);
+        }
 
         return $next($request);
     }

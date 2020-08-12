@@ -1,6 +1,6 @@
 {
-    "name": "marksihor/laravel-messaging",
-    "description": "Simple laravel messaging",
+    "name": "marksihor/laravel-cart",
+    "description": "Simple Cart",
     "license": "MIT",
     "authors": [
         {
@@ -13,12 +13,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MarksIhor\\LaravelMessaging\\": "src"
+            "MarksIhor\\LaravelCart\\": "src"
         }
     },
     "extra": {
         "laravel": {
-            "providers": ["MarksIhor\\LaravelMessaging\\MessagingServiceProvider"]
+            "providers": ["MarksIhor\\LaravelCart\\CartServiceProvider"]
         }
     }
 }

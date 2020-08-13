@@ -10,7 +10,7 @@ class Cart
 {
     public function getContent(): Collection
     {
-        return $this->getCart()->items->groupBy('seller_id');
+        return $this->getCart()->items->load('product')->groupBy('seller_id');
     }
 
     public function getContentArray(): array

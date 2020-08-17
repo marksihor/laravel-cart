@@ -8,14 +8,22 @@ use MarksIhor\LaravelCart\Models\{Cart as CartModel, CartItem};
 
 class Cart
 {
-    public function getContent(): Collection
+    public function getContent(?int $cartId = null): ?Collection
     {
-        return $this->getCart()->items->load('product')->groupBy('seller_id');
+        $cart = $this->getCart($cartId);
+
+        if (!$cart) return null;
+
+        return $cart->items->load('product')->groupBy('seller_id');
     }
 
-    public function getContentArray(): array
+    public function getContentArray(?int $cartId = null): ?array
     {
-        return $this->getContent()->toArray();
+        $content = $this->getContent($cartId);
+
+        if (!$content) return null;
+
+        return $content->toArray();
     }
 
     public function addItem(array $data): void
@@ -47,23 +55,35 @@ class Cart
         ])->delete();
     }
 
-    public function getTotal(string $type): float
+    public function getTotal(string $type, ?int $cartId = null): ?float
     {
-        if (in_array($type, ['total', 'discount', 'price'])) {
-            return CartItem::where('cart_id', $this->getCart()->id)->sum($type);
+        $cart = $this->getCart($cartId);
+
+        if ($cart) {
+            if (in_array($type, ['total', 'discount', 'price'])) {
+                return CartItem::where('cart_id', $cart->id)->sum($type);
+            } elseif ($type === 'quantity') {
+                return CartItem::where('cart_id', $cart->id)->count();
+            }
         }
 
-        return 0;
+        return null;
     }
 
-    public function clearCart()
+    public function clearCart(?int $cartId = null)
     {
-        CartItem::where('cart_id', $this->getCart()->id)->delete();
+        $cart = $this->getCart($cartId);
+
+        if ($cart) {
+            CartItem::where('cart_id', $cart->id)->delete();
+        }
     }
 
-    private function getCart(): CartModel
+    public function getCart(?int $cartId = null): ?CartModel
     {
-        if (auth()->check()) {
+        if ($cartId) {
+            return CartModel::find($cartId);
+        } elseif (auth()->check()) {
             return CartModel::firstOrCreate(['user_id' => auth()->id()]);
         } else {
             return CartModel::firstOrCreate(['uuid' => Helpers::getUuid()]);

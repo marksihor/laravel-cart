@@ -13,4 +13,9 @@ class Cart extends Model
         return $this->hasMany('MarksIhor\LaravelCart\Models\CartItem')
             ->orderBy('id', 'desc');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(config('auth.providers.users.model'));
+    }
 }

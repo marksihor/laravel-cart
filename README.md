@@ -51,9 +51,6 @@ $ php artisan vendor:publish --provider="MarksIhor\\LaravelCart\\CartServiceProv
 \Сart::getTotal($type, $cartId);
 \Cart::updateItem($item, $data);
 
-
-
-
 ```
 
 ## License

@@ -28,6 +28,34 @@ $ php artisan vendor:publish --provider="MarksIhor\\LaravelCart\\CartServiceProv
 
 4. Use "cart" middleware on routes you nedd to access cart
 
+### Usage examples
+
+```php
+
+\Cart::addItem([
+            'product_id' => $product->id,
+            'seller_id' => $product->user_id,
+            'attributes' => $attributes,
+            'price' => $product->price
+        ]);
+\Cart::getCart();
+\Cart::getCart($cartId);
+\Cart::getContentArray();
+\Cart::getContentArray($cartId);
+\Cart::getContent();
+\Cart::getContent($cartId);
+\Cart::deleteItem($itemId);
+\Cart::clearCart();
+\Cart::clearCart($itemId);
+\Cart::getTotal($type); // price|total|discount|quantity
+\Сart::getTotal($type, $cartId);
+\Cart::updateItem($item, $data);
+
+
+
+
+```
+
 ## License
 
 MIT
